@@ -4,25 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-class Class1
+class Class1 // 
 {
-    private int ccc;
-    public  int CalcCounter(int[] a)
+
+    public  int CalcCounter(int[] a)//собственно фуекция подсчёта фишек
     {
          int cnt = 0;
          int i = 0, i1 = 1;
          int max, min, max_ind=0, min_ind=0;
          Boolean fl = true;
 
-         if (!ValidateInput(a))
+         if (!ValidateInput(a))//если количество фишек не делится поровну на число мест, то такие исходные данные считаются некорректными
             return -1;
 
-        while (fl)
+        while (true)
         {
             fl = false;
             max = a[0];
             min = a[0];
-            for (i = 0; i < a.Length; i++)
+            for (i = 0; i < a.Length; i++)//пройдти по всему массиву и найти максимальное и минимальное значение с их индексами
             {
                 if (max < a[i])
                 {
@@ -37,22 +37,22 @@ class Class1
                     fl = true;
                 }
             }
-            if (!fl)
+            if (!fl)  //если не найдено максимального и минимального значения, то все значения одинаковы, это условия для выхода
                    break;
 
-            i1 = Math.Abs(max_ind - min_ind);
+            i1 = Math.Abs(max_ind - min_ind); //определить, сколько действий нужно для перемещения одной фишки от максимума к минимуму
             if (i1 <= a.Length / 2)
                 cnt += i1;
-            else cnt += Math.Min(max_ind, min_ind) + a.Length - Math.Max(max_ind, min_ind);
+            else cnt += Math.Min(max_ind, min_ind) + a.Length - Math.Max(max_ind, min_ind); // с учётом, что массив зациклен
 
-            a[max_ind]--;
+            a[max_ind]--;// переместить одну фишку с максимума в минимум
             a[min_ind]++;
         }
           
          return cnt;
     }
 
-    public int CalcCounter(string s)
+    public int CalcCounter(string s) // если входные данные -- строка, которую ещё нужно распарсить
     {
         int[] a;
 
@@ -60,7 +60,7 @@ class Class1
         return CalcCounter(a);
     }
 
-    private bool ValidateInput(int[] a)
+    private bool ValidateInput(int[] a) // проверка, подходят ли исходные данные
     {
         int i, count = 0;
 
@@ -72,17 +72,15 @@ class Class1
     }
 
 
-    private ushort StrToIntArr(string inp, out int[] a)
+    private ushort StrToIntArr(string inp, out int[] a)// разбор строки на массив с числами, разделителем считается пробел
     {
-        //int outp = new int[];
-        ushort cnt = 0;
         ushort i, j = 0;
-        string str = ""; //= new string('\0', 15);
+        string str = ""; 
         int[] b = new int[100];
 
         for (i = 0; i <= inp.Length; i++)
         {
-            if (i == inp.Length || inp[i] == ' ')
+            if ((i == inp.Length || inp[i] == ' ') && str != "")
             {
                 b[j] = Convert.ToInt16(str);
                 str = "";
@@ -115,24 +113,18 @@ namespace ConsoleApplication1
         static void Main(string[] args)
         {
             int a;
-            int[] aa = new int[5];
 
-            aa[0] = 1;
-            aa[1] = 5;
-            aa[2] = 9;
-            aa[3] = 10;
-            aa[4] = 5;
 
             Class1 cl = new Class1();
 
-            while (true)
+            while (true) // ввод данных, бесконечный, до выхода из программы
             {
                 Console.WriteLine("Введите массив через пробел");
                 a = cl.CalcCounter(Console.ReadLine());
 
               Console.WriteLine($"Count: {a}");
             }
-            Console.Read();
+   
         }
     }
 }
