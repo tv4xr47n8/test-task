@@ -9,8 +9,8 @@ class Class1 //
 
     public  int CalcCounter(int[] a)//собственно фуекция подсчёта фишек
     {
-         int cnt = 0, d_cnt, d_cnt_best;
-         int i = 0, j, i1 = 1;
+         int cnt = 0, d_cnt, d_cnt_best, mid, b;
+         int i = 0, j, i1 = 1, i2 = -1;
          int max, min, cmax, cmin, min_pos = 0, max_pos = 0;
          int[] max_ind = new int[50], min_ind = new int[50];
          Boolean fl = true;
@@ -18,11 +18,18 @@ class Class1 //
          if (!ValidateInput(a))//если количество фишек не делится поровну на число мест, то такие исходные данные считаются некорректными
             return -1;
 
+
+        for (i = 0; i < a.Length; i++)
+            cnt += a[i];
+
+        mid = cnt / a.Length;
+
+        cnt = 0;
         while (true)
         {
             cmax = 0;
             cmin = 0;
-            max = a[0]; 
+            max = a[0];
             min = a[0];
             d_cnt_best = 99999;
             for (i = 0; i < a.Length; i++)//пройдти по всему массиву и найти максимальное и минимальное значение
@@ -31,33 +38,33 @@ class Class1 //
                     max = a[i];
 
                 if (min > a[i])
-                    min = a[i];          
+                    min = a[i];
             }
             if (max == a[0] && min == a[0])  //если не найдено максимального и минимального значения, то все значения одинаковы, это условия для выхода
-                   break;
+                break;
 
             for (i = 0; i < a.Length; i++)// найти позиции всех максимумов и минимумов
             {
-                if (a[i] == max)
+                if (a[i] /*== max*/ > mid)
                 {
                     max_ind[cmax] = i;
                     cmax++;
                 }
-                if (a[i] == min)
+                if (a[i]/* == min*/ < mid )
                 {
                     min_ind[cmin] = i;
                     cmin++;
-                }       
+                }
             }
 
             for (i = 0; i < cmax; i++) //найти ближайшие максимумы и минимумы
                 for (j = 0; j < cmin; j++)
-                { 
-                   i1 = Math.Abs(max_ind[i] - min_ind[j]); //определить, сколько действий нужно для перемещения одной фишки от максимума к минимуму
-                   if (i1 <= a.Length / 2)
-                      d_cnt = i1;
-                   else d_cnt = Math.Min(max_ind[i], min_ind[j]) + a.Length - Math.Max(max_ind[i], min_ind[j]); // с учётом, что массив зациклен
-                   if (d_cnt < d_cnt_best)
+                {
+                    i1 = Math.Abs(max_ind[i] - min_ind[j]); //определить, сколько действий нужно для перемещения одной фишки от максимума к минимуму
+                    if (i1 <= a.Length / 2)
+                        d_cnt = i1;
+                    else d_cnt = Math.Min(max_ind[i], min_ind[j]) + a.Length - Math.Max(max_ind[i], min_ind[j]); // с учётом, что массив зациклен
+                    if (d_cnt < d_cnt_best)
                     {
                         d_cnt_best = d_cnt;
                         min_pos = min_ind[j];
@@ -69,8 +76,10 @@ class Class1 //
             a[max_pos]--;// переместить одну фишку с максимума в минимум
             a[min_pos]++;
         }
-          
-         return cnt;
+
+
+
+        return cnt;
     }
 
     public int CalcCounter(string s) // если входные данные -- строка, которую ещё нужно распарсить
@@ -103,6 +112,8 @@ class Class1 //
         {
             if ((i == inp.Length || inp[i] == ' ') && str != "")
             {
+                if (j >= b.Length)
+                    Array.Resize(ref b, b.Length + 50);
                 b[j] = Convert.ToInt16(str);
                 str = "";
                 j++; 
